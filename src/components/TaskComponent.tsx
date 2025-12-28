@@ -11,8 +11,13 @@ import BottomSheet, {
 type Props = {
 	task: Task | null;
 	onSelectTask: any;
+	loadTasks: any;
 };
-export default function TaskComponent({ task, onSelectTask }: Props) {
+export default function TaskComponent({
+	task,
+	onSelectTask,
+	loadTasks,
+}: Props) {
 	return (
 		<>
 			<TouchableOpacity
@@ -30,6 +35,7 @@ export default function TaskComponent({ task, onSelectTask }: Props) {
 					value={task?.status === "done"}
 					onValueChange={(newValue) => {
 						updateTaskStatus(task as Task, newValue ? "done" : "pending");
+						loadTasks();
 					}}
 				/>
 				<Text

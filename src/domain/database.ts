@@ -1,5 +1,5 @@
 import * as SQLite from "expo-sqlite";
-import { Task, TaskStatus } from "./types";
+import { Task, TaskStatus, UserData } from "./types";
 import { getTodayDate } from "./dates";
 
 let db: SQLite.SQLiteDatabase | null = null;
@@ -10,7 +10,7 @@ export async function initDatabase() {
 	db = await SQLite.openDatabaseAsync("daymark.db");
 
 	try {
-		await db.runAsync(`
+		await db.execAsync(`
       CREATE TABLE IF NOT EXISTS Task (
         id INTEGER NOT NULL,
         name TEXT NOT NULL,
@@ -20,6 +20,14 @@ export async function initDatabase() {
         completedAt INTEGER,
         status TEXT NOT NULL
       );
+	  CREATE TABLE IF NOT EXISTS UserData (
+		id INTEGER NOT NULL,
+		name TEXT NOT NULL,
+		numFMTimers INTEGER NOT NULL,
+		sumDurFMTimers INTEGER NOT NULL
+	  );
+	  INSERT OR IGNORE INTO UserData (id, name, numFMTimers, sumDurFMTimers) VALUES (0, 'User', 0, 0);
+    
     `);
 
 		console.log("Database initialized.");
@@ -30,6 +38,7 @@ export async function initDatabase() {
 	return db;
 }
 
+/* --------------------- TASK CRUD --------------------- */
 export async function createTask(task: Task) {
 	const database = await initDatabase();
 	try {
@@ -51,6 +60,17 @@ export async function createTask(task: Task) {
 	}
 }
 
+export async function deleteTask(task: Task) {
+	const database = await initDatabase();
+	try {
+		await database.runAsync(`DELETE FROM Task WHERE id = ?`, [task.id]);
+		console.log("Task deleted successfully.");
+	} catch (err) {
+		console.log("Error deleting task:", err);
+	}
+}
+
+/* --------------------- TASK STATUS / EXPIRE --------------------- */
 export async function updateTaskStatus(task: Task, status: TaskStatus) {
 	const todayDate = getTodayDate();
 	if (task.date === todayDate) {
@@ -70,25 +90,14 @@ export async function updateTaskStatus(task: Task, status: TaskStatus) {
 	}
 }
 
-export async function deleteTask(task: Task) {
-	const database = await initDatabase();
-
-	try {
-		const query = database.runAsync(`DELETE FROM Task WHERE id = ?`, [task.id]);
-		console.log("Task deleted successfully.");
-	} catch (err) {
-		console.log("Error deleting task:", err);
-	}
-}
-
 export async function expireTasks() {
 	const database = await initDatabase();
 	const todayDate = getTodayDate();
 	try {
 		await database.runAsync(
 			`UPDATE Task 
-             SET status = 'expired' 
-             WHERE status = 'pending' AND date < ?`,
+       SET status = 'expired' 
+       WHERE status = 'pending' AND date < ?`,
 			[todayDate]
 		);
 		console.log("Expired tasks updated successfully");
@@ -97,6 +106,7 @@ export async function expireTasks() {
 	}
 }
 
+/* --------------------- TASK QUERIES --------------------- */
 export async function getAllTasks(): Promise<Task[]> {
 	const database = await initDatabase();
 	await expireTasks();
@@ -126,5 +136,55 @@ export async function getTodayTasks(): Promise<Task[]> {
 	} catch (err) {
 		console.error("Error querying tasks:", err);
 		return [];
+	}
+}
+
+/* --------------------- USER DATA (placeholder) --------------------- */
+// Aqui você vai criar funções como:
+// export async function getUserData() { ... }
+// export async function saveUserData(name: string, timersCreated: number, avgDuration: number) { ... }
+// export async function clearUserData() { ... }
+
+export async function getUserData(): Promise<UserData | null> {
+	const database = await initDatabase();
+	try {
+		const result: any[] = await database.getAllAsync("SELECT * FROM UserData");
+		if (result.length === 0) return null;
+		// Mapear para UserData
+		const row = result[0];
+		return {
+			id: row.id,
+			name: row.name,
+			numFMTimers: row.numFMTimers,
+			sumDurFMTimers: row.sumDurFMTimers,
+		};
+	} catch (err) {
+		console.log("Error getting userdata:", err);
+		return null;
+	}
+}
+
+// Atualizar nome do usuário
+export async function changeUserName(name: string): Promise<void> {
+	const database = await initDatabase();
+	try {
+		await database.runAsync("UPDATE UserData SET name = ? WHERE id = 0", [
+			name,
+		]);
+	} catch (err) {
+		console.log("Error updating user name:", err);
+	}
+}
+
+// Incrementar contador e somar duração de modo foco
+export async function addFMTimer(duration: number): Promise<void> {
+	const database = await initDatabase();
+	try {
+		await database.runAsync(
+			"UPDATE UserData SET numFMTimers = numFMTimers + 1, sumDurFMTimers = sumDurFMTimers + ? WHERE id = 0",
+			[duration]
+		);
+	} catch (err) {
+		console.log("Error adding FM timer:", err);
 	}
 }

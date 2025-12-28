@@ -30,6 +30,11 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.samuelvianna010.Daymark"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4f9bbb8e-a028-4611-8281-2298d1afd5ca"
+      }
     }
   }
 }

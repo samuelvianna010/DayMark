@@ -44,6 +44,8 @@ const CreateTaskBottomSheet = forwardRef<CreateTaskBottomSheetRef, Props>(
 
 				// Fecha o bottom sheet via bottomSheetRef
 				bottomSheetRef.current?.close();
+				setTaskName("");
+				setTaskDescription("");
 			}
 		};
 

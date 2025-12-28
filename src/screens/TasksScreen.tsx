@@ -77,6 +77,7 @@ export default function TasksScreen(props: any) {
 									task={t}
 									key={i}
 									onSelectTask={() => openSelectedTaskBottomSheet(t)}
+									loadTasks={loadTasks}
 								/>
 							))}
 						</ScrollView>

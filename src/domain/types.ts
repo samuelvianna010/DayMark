@@ -12,6 +12,12 @@ export interface Task {
 	completedAt?: number;
 	status: TaskStatus;
 }
+export interface UserData {
+	id: number;
+	name: string;
+	numFMTimers: number;
+	sumDurFMTimers: number;
+}
 
 export function convertToTask(name: string, description: string): Task {
 	const now = Date.now();
