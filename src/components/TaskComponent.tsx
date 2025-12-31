@@ -21,13 +21,13 @@ export default function TaskComponent({
 	return (
 		<>
 			<TouchableOpacity
-				className="bg-gray-200 mt-5 rounded-3xl p-4 flex-row gap-2 items-center"
+				className="bg-gray-200 dark:bg-neutral-900 mt-5 rounded-3xl p-4 flex-row gap-2 items-center"
 				activeOpacity={0.85}
 				onLongPress={() => onSelectTask(task)}
 			>
 				<CheckBox
 					tintColors={{
-						true: "#0000FF",
+						true: "#1d4ed8",
 						false: "#111111",
 					}}
 					animationDuration={200}
@@ -39,7 +39,7 @@ export default function TaskComponent({
 					}}
 				/>
 				<Text
-					className={`text-black ${task?.status === "expired" ? "line-through text-gray-400" : ""}`}
+					className={`text-black dark:text-neutral-200 ${task?.status === "expired" ? "line-through text-gray-400 dark:text-neutral-600" : ""}`}
 				>
 					{task?.name}
 				</Text>

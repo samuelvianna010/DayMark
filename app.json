@@ -1,40 +1,38 @@
 {
-  "expo": {
-    "name": "Daymark",
-    "slug": "Daymark",
-    "version": "1.0.0",
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "experiments": {
-      "tsconfigPaths": true
-    },
-    "plugins": [],
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.samuelvianna010.Daymark"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "4f9bbb8e-a028-4611-8281-2298d1afd5ca"
-      }
-    }
-  }
+	"expo": {
+		"name": "Daymark",
+		"slug": "Daymark",
+		"version": "1.0.0",
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"experiments": {
+			"tsconfigPaths": true
+		},
+		"plugins": [],
+		"orientation": "portrait",
+		"icon": "./assets/icon-full.png",
+		"userInterfaceStyle": "automatic",
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/icon-adaptive.png",
+				"backgroundColor": "#ffffff"
+			},
+			"package": "com.samuelvianna010.Daymark"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "4f9bbb8e-a028-4611-8281-2298d1afd5ca"
+			}
+		}
+	}
 }

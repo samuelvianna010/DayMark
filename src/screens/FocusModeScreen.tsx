@@ -13,6 +13,9 @@ import TimeoutBottomSheet, {
 	TimeoutBottomSheetRef,
 } from "@/components/TimeoutBottomSheet";
 import { addFMTimer } from "@/domain/database";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useColorScheme } from "nativewind";
+import { LinearGradient } from "expo-linear-gradient";
 
 // ---------- DATA ----------
 const hours = Array.from({ length: 24 }, (_, i) => ({
@@ -29,6 +32,7 @@ const seconds = minutes;
 
 export default function FocusModeScreen() {
 	const navigation = useNavigation();
+	const scheme = useColorScheme();
 
 	const [h, setH] = useState(0);
 	const [m, setM] = useState(25);
@@ -126,11 +130,21 @@ export default function FocusModeScreen() {
 
 	return (
 		<>
-			<View className="flex-1 bg-white pt-16">
-				<Text className="text-4xl font-black text-center text-blue-900">
-					Modo de Foco
+			<SafeAreaView className="bg-gray-200 dark:bg-neutral-950 p-1 h-28 items-center justify-center">
+				<Text className="text-blue-950 dark:text-blue-600 font-medium text-4xl">
+					modo de foco
 				</Text>
-
+			</SafeAreaView>
+			<LinearGradient
+				colors={
+					scheme.colorScheme === "dark"
+						? ["#0a0a0a", "#000"]
+						: ["#e5e7eb", "#FFF"]
+				}
+				locations={[0, 1]}
+				className="h-[30]"
+			/>
+			<View className="flex-1 bg-white dark:bg-black ">
 				<View className="flex-1 justify-center items-center">
 					{/* PICKER */}
 					{!running && (
@@ -141,42 +155,55 @@ export default function FocusModeScreen() {
 									width={80}
 									items={hours}
 									initialSelectedIndex={h}
-									backgroundColor="#ffffff"
+									backgroundColor={
+										scheme.colorScheme == "dark" ? "#000000" : "white"
+									}
+									haptics={true}
 									onChange={({ index }) => setH(index)}
 									renderItem={(props) => (
-										<Text className="text-blue-800 text-6xl font-black">
+										<Text className="text-blue-800 dark:text-blue-300 text-6xl font-black">
 											{props.label}
 										</Text>
 									)}
 								/>
 
-								<Text className="text-4xl font-black">:</Text>
+								<Text className="text-4xl font-black text-black dark:text-blue-200">
+									:
+								</Text>
 
 								<WheelPickerExpo
 									height={360}
 									width={80}
 									items={minutes}
 									initialSelectedIndex={m}
-									backgroundColor="#ffffff"
+									backgroundColor={
+										scheme.colorScheme == "dark" ? "#000000" : "#ffffff"
+									}
+									haptics={true}
 									onChange={({ index }) => setM(index)}
 									renderItem={(props) => (
-										<Text className="text-blue-800 text-6xl font-black">
+										<Text className="text-blue-800 dark:text-blue-300 text-6xl font-black">
 											{props.label}
 										</Text>
 									)}
 								/>
 
-								<Text className="text-4xl font-black">:</Text>
+								<Text className="text-4xl font-black text-black dark:text-blue-200">
+									:
+								</Text>
 
 								<WheelPickerExpo
 									height={360}
 									width={80}
 									items={seconds}
 									initialSelectedIndex={s}
-									backgroundColor="#ffffff"
+									backgroundColor={
+										scheme.colorScheme == "dark" ? "#000000" : "white"
+									}
+									haptics={true}
 									onChange={({ index }) => setS(index)}
 									renderItem={(props) => (
-										<Text className="text-blue-800 text-6xl font-black">
+										<Text className="text-blue-800 dark:text-blue-300 text-6xl font-black">
 											{props.label}
 										</Text>
 									)}
@@ -188,7 +215,7 @@ export default function FocusModeScreen() {
 					{/* DISPLAY FINAL */}
 					{running && (
 						<Animated.View style={displayStyle}>
-							<Text className="text-6xl font-black text-blue-800 tracking-tight">
+							<Text className="text-6xl font-black text-blue-800 dark:text-blue-300 tracking-tight">
 								{`${String(hLeft).padStart(2, "0")}:${String(mLeft).padStart(
 									2,
 									"0"
@@ -203,16 +230,18 @@ export default function FocusModeScreen() {
 					{!running ? (
 						<TouchableOpacity
 							onPress={startTimer}
-							className="bg-blue-800 px-8 py-4 rounded-full"
+							className="bg-orange-900 px-8 py-4 rounded-full"
 						>
 							<Text className="text-white font-bold text-lg">Iniciar</Text>
 						</TouchableOpacity>
 					) : (
 						<TouchableOpacity
 							onPress={resetTimer}
-							className="bg-gray-300 px-8 py-4 rounded-full"
+							className="bg-gray-300 dark:bg-neutral-900 px-8 py-4 rounded-full"
 						>
-							<Text className="text-black font-bold text-lg">Resetar</Text>
+							<Text className="text-black dark:text-neutral-200 font-bold text-lg">
+								Resetar
+							</Text>
 						</TouchableOpacity>
 					)}
 				</View>

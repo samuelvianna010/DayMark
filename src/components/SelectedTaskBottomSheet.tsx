@@ -4,6 +4,7 @@ import BottomSheet, {
 	BottomSheetBackdrop,
 	BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { useColorScheme } from "nativewind";
 import { ForwardedRef, forwardRef, useImperativeHandle, useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 type Props = {
@@ -17,6 +18,7 @@ export interface SelectedTaskBottomSheetRef {
 }
 const SelectedTaskBottomSheet = forwardRef<SelectedTaskBottomSheetRef, Props>(
 	(props, ref) => {
+		const scheme = useColorScheme();
 		if (!props.task) return;
 		const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -44,17 +46,24 @@ const SelectedTaskBottomSheet = forwardRef<SelectedTaskBottomSheetRef, Props>(
 				index={-1}
 				snapPoints={["1%"]}
 				ref={bottomSheetRef}
+				backgroundStyle={{
+					backgroundColor: scheme.colorScheme == "dark" ? "#0a0a0a" : "white",
+				}}
 			>
-				<BottomSheetView className="p-6">
-					<Text className="text-3xl font-black">Tarefa</Text>
-					<Text className="mt-3 text-2xl ">{props?.task?.name}</Text>
-					<Text className="font-light mb-5">
+				<BottomSheetView className="p-6 bg-white dark:bg-neutral-950">
+					<Text className="text-3xl font-black text-black dark:text-neutral-100">
+						Tarefa
+					</Text>
+					<Text className="mt-3 text-2xl text-black dark:text-neutral-100">
+						{props?.task?.name}
+					</Text>
+					<Text className="font-light mb-5 text-black dark:text-neutral-100">
 						Descrição: {props.task?.description}
 					</Text>
 
 					<View className="gap-3">
 						<TouchableOpacity
-							className="w-full p-4 rounded-3xl bg-blue-200"
+							className="w-full p-4 rounded-3xl bg-blue-200 dark:bg-blue-950"
 							activeOpacity={0.85}
 							onPress={() => {
 								updateTaskStatus(
@@ -66,14 +75,14 @@ const SelectedTaskBottomSheet = forwardRef<SelectedTaskBottomSheetRef, Props>(
 								props.onTaskUpdated();
 							}}
 						>
-							<Text className="text-blue-800 text-center text-xl">
+							<Text className="text-blue-800 dark:text-blue-300 text-center text-xl">
 								{props.task?.status === "done"
 									? "Marcar como incompleta"
 									: "Marcar como completa"}
 							</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							className="w-full p-4 rounded-3xl bg-red-200"
+							className="w-full p-4 rounded-3xl bg-red-200 dark:bg-red-950"
 							activeOpacity={0.85}
 							onPress={() => {
 								deleteTask(props.task as Task);
@@ -81,7 +90,7 @@ const SelectedTaskBottomSheet = forwardRef<SelectedTaskBottomSheetRef, Props>(
 								props.onTaskUpdated();
 							}}
 						>
-							<Text className="text-red-800 text-center text-xl">
+							<Text className="text-red-800 dark:text-red-200 text-center text-xl">
 								Excluir Tarefa
 							</Text>
 						</TouchableOpacity>

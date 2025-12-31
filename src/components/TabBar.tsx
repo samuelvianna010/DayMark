@@ -9,6 +9,7 @@ import Animated, {
 import { useEffect } from "react";
 import { LayoutAnimation, TouchableOpacity, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { useColorScheme } from "nativewind";
 
 export default function TabBar({
 	state,
@@ -24,8 +25,9 @@ export default function TabBar({
 		});
 	}, [state.index]);
 
+	const scheme = useColorScheme();
 	return (
-		<View className="flex-row gap-3 align-center justify-center p-4 pb-6 bg-white">
+		<View className="flex-row gap-3 align-center justify-center p-4 pb-6 bg-white dark:bg-neutral-950">
 			{state.routes.map((route, index) => {
 				const { options } = descriptors[route.key];
 				const isFocused = state.index === index;
@@ -36,7 +38,7 @@ export default function TabBar({
 					backgroundColor: interpolateColor(
 						sharedValues[index].value,
 						[0, 1],
-						["#dbeafe", "#2563eb"]
+						[scheme.colorScheme == "dark" ? "#431407" : "#ffedd5", "#ea580c"]
 					),
 				}));
 
@@ -57,7 +59,11 @@ export default function TabBar({
 
 				const icon = options.tabBarIcon?.({
 					focused: isFocused,
-					color: isFocused ? "#fff" : "#2563eb",
+					color: isFocused
+						? "#ffedd5"
+						: scheme.colorScheme == "dark"
+							? "#fb923c"
+							: "#9a3412",
 					size: 24,
 				});
 

@@ -11,9 +11,10 @@ import {
 import TasksScreen from "@/screens/TasksScreen";
 import { FontAwesome, FontAwesome6 } from "@expo/vector-icons";
 import FocusModeScreen from "@/screens/FocusModeScreen";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import TabBar from "@/components/TabBar";
 import MyProfileScreen from "@/screens/MyProfileScreen";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const TasksStack = createStackNavigator({
 	screens: {
@@ -74,7 +75,7 @@ const Tabs = createBottomTabNavigator({
 			screen: MyProfileScreen,
 			options: {
 				title: "Meu Perfil",
-				freezeOnBlur: true,
+				freezeOnBlur: false,
 				tabBarIcon: ({ color, size }) => (
 					<FontAwesome name="user" size={size} color={color} />
 				),
